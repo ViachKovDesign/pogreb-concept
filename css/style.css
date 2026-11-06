@@ -216,6 +216,11 @@ html.age-denied .age__denied { display: block; }
 @media (min-width: 560px) {
   .hero__actions { flex-direction: row; flex-wrap: wrap; }
 }
+@media (min-width: 600px) and (max-width: 899px) {
+  .hero__grid { grid-template-areas: "eyebrow eyebrow" "title glass" "lead glass" "actions glass" "facts facts"; align-items: start; }
+  .hero__glass { width: clamp(180px, 30vw, 250px); align-self: center; }
+  .hero__facts { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
 @media (min-width: 900px) {
   .hero { min-height: calc(100svh - var(--header-h)); display: flex; align-items: center; }
   .hero__grid { width: min(100% - 2 * var(--gutter), var(--maxw)); grid-template-columns: minmax(0, 1fr) minmax(260px, .55fr); grid-template-areas: "text glass" "facts glass"; gap: 40px clamp(32px, 5vw, 96px); align-items: center; }
@@ -287,13 +292,13 @@ input[type="range"]:focus-visible { outline-offset: 2px; }
 .wheel__svg svg { width: 100%; height: auto; overflow: visible; }
 .wheel__sector { cursor: pointer; outline: none; }
 .wheel__sector path { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1; transition: fill .25s; }
-.wheel__sector text { fill: var(--ink); font: 500 10.5px/1 var(--f-text); pointer-events: none; transition: fill .25s; }
+.wheel__sector text { fill: var(--ink); font: 500 12.5px/1 var(--f-text); pointer-events: none; transition: fill .25s; }
 .wheel__sector:hover path, .wheel__sector.is-preview path { fill: color-mix(in srgb, var(--ink) 18%, var(--surface)); }
 .wheel__sector[aria-pressed="true"] path { fill: var(--ink); }
 .wheel__sector[aria-pressed="true"] text { fill: var(--bg); }
 .wheel__sector:focus-visible path { stroke: var(--ink); stroke-width: 3; }
 .wheel__hub { fill: var(--bg); stroke: var(--line-strong); }
-.wheel__hub-text { fill: var(--ink); font: italic 500 15px/1 var(--f-accent); }
+.wheel__hub-text { fill: var(--ink); font: italic 500 18px/1 var(--f-accent); }
 .wheel__status { margin-top: 12px; font-size: .95rem; }
 .wheel__status:empty { display: none; }
 @media (max-width: 719px) { .wheel__svg { max-width: 290px; } .wheel { margin-top: 28px; } }

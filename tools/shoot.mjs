@@ -258,7 +258,7 @@ async function states(browser) {
   }
 }
 
-const browser = await chromium.launch();
+const browser = await chromium.launch({ args: ['--lang=ru-RU'] });
 try {
   await fullShots(browser);
   if (!QUICK) await states(browser);

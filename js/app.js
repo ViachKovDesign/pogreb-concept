@@ -7,7 +7,7 @@
   var $ = function (s, c) { return (c || doc).querySelector(s); };
   var $$ = function (s, c) { return Array.prototype.slice.call((c || doc).querySelectorAll(s)); };
   var C = window.PogrebColor;
-  var hasGsap = !!(window.gsap && window.ScrollTrigger);
+  var hasGsap = false; // GSAP подгружается после первой отрисовки, см. loadGsap()
   var reduceMQ = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
   var reduced = function () { return reduceMQ.matches; };
 
@@ -314,13 +314,13 @@
       var words = DATA.aromas[k].split(' ');
       var lines = words.length > 2 ? [words[0], words.slice(1).join(' ')] : [DATA.aromas[k]];
       var text = lines.map(function (ln, li) {
-        return '<tspan x="' + c[0].toFixed(1) + '" dy="' + (li === 0 ? (lines.length > 1 ? -2 : 4.5) : 15) + '">' + esc(ln) + '</tspan>';
+        return '<tspan x="' + c[0].toFixed(1) + '" dy="' + (li === 0 ? (lines.length > 1 ? -2 : 4.5) : 16) + '">' + esc(ln) + '</tspan>';
       }).join('');
       svg += '<g class="wheel__sector" role="button" tabindex="' + (i === 0 ? 0 : -1) + '" aria-pressed="false" data-aroma="' + k + '" aria-label="' +
         esc(DATA.aromas[k]) + ': ' + count + ' ' + plural(count, 'вино', 'вина', 'вин') + '">' +
         '<path d="' + d + '"/><text x="' + c[0].toFixed(1) + '" y="' + (c[1] - (lines.length > 1 ? 4 : 0)).toFixed(1) + '" text-anchor="middle">' + text + '</text></g>';
     });
-    svg += '<circle class="wheel__hub" r="' + (r0 - 6) + '"/><text class="wheel__hub-text" id="wheel-hub" text-anchor="middle" y="5">аромат</text></svg>';
+    svg += '<circle class="wheel__hub" r="' + (r0 - 6) + '"/><text class="wheel__hub-text" id="wheel-hub" text-anchor="middle" y="6">аромат</text></svg>';
     var box = $('#wheel');
     box.innerHTML = svg;
     var sectors = $$('.wheel__sector', box);
@@ -632,7 +632,7 @@
     var g = +bGuests.value;
     var WDF = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
     $('#booking-summary').textContent = WDF[d.getDay()] + ', ' + d.getDate() + ' ' + MONTHS[d.getMonth()] + ', ' +
-      $('input[name="time"]:checked', bForm).value + '. Стол на ' + g + ' ' + plural(g, 'гостя', 'гостей', 'гостей') + ', на имя ' + bName.value.trim() + '.';
+      $('input[name="time"]:checked', bForm).value + '. Гостей: ' + g + ', на имя ' + bName.value.trim() + '.';
     bForm.hidden = true;
     var done = $('#booking-done');
     done.hidden = false;
@@ -781,6 +781,7 @@
     if (motionStarted) return;
     motionStarted = true;
     measure();
+    hasGsap = !!(window.gsap && window.ScrollTrigger);
     if (hasGsap) {
       var gsap = window.gsap, ST = window.ScrollTrigger;
       gsap.registerPlugin(ST);
@@ -817,14 +818,35 @@
     onScroll(0);
     startGlass();
   }
+  // GSAP (115 КБ) не нужен для первого экрана — грузим его, когда страница уже нарисована.
+  // Если файлы не загрузятся, сработает запасной путь на обычном scroll.
+  var gsapState = 0, gsapWaiters = [];
+  function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+      var el = doc.createElement('script');
+      el.src = src; el.async = false;
+      el.onload = resolve; el.onerror = reject;
+      doc.head.appendChild(el);
+    });
+  }
+  function loadGsap(cb) {
+    if (window.gsap && window.ScrollTrigger) { cb(); return; }
+    gsapWaiters.push(cb);
+    if (gsapState) return;
+    gsapState = 1;
+    Promise.all([loadScript('vendor/gsap.min.js'), loadScript('vendor/ScrollTrigger.min.js')])
+      .catch(function () { /* без GSAP — запасной путь */ })
+      .then(function () { var w = gsapWaiters; gsapWaiters = []; w.forEach(function (f) { f(); }); });
+  }
   function whenIdle(fn) {
     if ('requestIdleCallback' in window) window.requestIdleCallback(fn, { timeout: 1500 });
     else setTimeout(fn, 200);
   }
   function scheduleMotion() {
     if (root.classList.contains('age-pending')) return; // за экраном 18+ анимировать нечего
-    if (doc.readyState === 'complete') whenIdle(startMotion);
-    else window.addEventListener('load', function () { whenIdle(startMotion); }, { once: true });
+    var go = function () { whenIdle(function () { loadGsap(startMotion); }); };
+    if (doc.readyState === 'complete') go();
+    else window.addEventListener('load', go, { once: true });
   }
 
   // смена системной настройки «уменьшить движение» на лету
