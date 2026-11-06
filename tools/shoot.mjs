@@ -32,7 +32,7 @@ async function scrollThrough(page) {
     const h = document.documentElement.scrollHeight;
     for (let y = 0; y < h; y += Math.round(innerHeight * 0.6)) { window.scrollTo(0, y); await new Promise((r) => setTimeout(r, 90)); }
     window.scrollTo(0, document.documentElement.scrollHeight);
-    await new Promise((r) => setTimeout(r, 400));
+    await new Promise((r) => setTimeout(r, 1600));
   });
 }
 
@@ -57,6 +57,8 @@ async function fullShots(browser) {
     const { ctx, page } = await newPage(browser, w, h, { touch: w < 800 });
     await scrollThrough(page);
     await hScrollCheck(page, w);
+    const stuck = await page.$$eval('[data-reveal]', (l) => l.filter((e) => getComputedStyle(e).opacity !== '1').length);
+    if (stuck) problems.push(`[${w}] после прокрутки остались невидимые блоки: ${stuck}`);
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(400);
     await page.screenshot({ path: `${OUT}/first-screen-${w}.png` });

@@ -766,7 +766,20 @@
     startGlass();
   }
 
+  // Появление блоков. Своя проверка на каждом кадре прокрутки, а не триггер на каждый блок:
+  // блок, который пролистали «прыжком» (якорь, быстрый свайп), всё равно проявится.
+  var pendingReveal = [];
+  function checkReveal() {
+    if (!pendingReveal.length) return;
+    var edge = window.innerHeight * 0.94, ready = [];
+    pendingReveal = pendingReveal.filter(function (el) {
+      if (el.getBoundingClientRect().top < edge) { ready.push(el); return false; }
+      return true;
+    });
+    if (ready.length) window.gsap.to(ready, { opacity: 1, y: 0, duration: 0.85, ease: 'power3.out', stagger: 0.08, clearProps: 'opacity,transform' });
+  }
   function onScroll(velocity) {
+    checkReveal(); // сначала чтение геометрии, потом запись переменных — без лишних пересчётов раскладки
     if (root.classList.contains('flow')) applyFlow();
     applyMini();
     if (!reduced()) {
@@ -792,14 +805,10 @@
       });
       if (!reduced()) {
         // прячем только то, что ниже экрана, и проявляем при подлёте — ничего не остаётся скрытым навсегда
-        var below = $$('[data-reveal]').filter(function (el) { return el.getBoundingClientRect().top > window.innerHeight; });
-        if (below.length) {
-          gsap.set(below, { opacity: 0, y: 34 });
-          ST.batch(below, {
-            start: 'top 94%', once: true,
-            onEnter: function (batch) { gsap.to(batch, { opacity: 1, y: 0, duration: 0.85, ease: 'power3.out', stagger: 0.08, clearProps: 'opacity,transform' }); }
-          });
-        }
+        pendingReveal = $$('[data-reveal]').filter(function (el) { return el.getBoundingClientRect().top > window.innerHeight; });
+        if (pendingReveal.length) gsap.set(pendingReveal, { opacity: 0, y: 34 });
+        // страховка: раз в полторы секунды проверяем ещё раз (например, после смены размера окна без прокрутки)
+        setInterval(checkReveal, 1500);
       }
       // высота страницы меняется при фильтрации — пересчитываем точки
       if ('ResizeObserver' in window) {
