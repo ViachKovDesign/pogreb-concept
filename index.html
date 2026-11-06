@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Погреб — винный бар и винотека в сводчатом подвале · концепт</title>
+<meta name="description" content="Вымышленный винный бар в старом сводчатом подвале в Москве. Подбор вина по вкусу тремя ползунками, колесо ароматов, винные ужины и бронь стола. Концепт-проект ViachKovDesign.">
+<meta name="theme-color" content="#f1e4b3">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Погреб — концепт">
+<meta property="og:title" content="Погреб — вино под ваш вкус, а не под этикетку">
+<meta property="og:description" content="Концепт сайта винного бара в сводчатом подвале: подбор вина ползунками, колесо ароматов, винные ужины и бронь стола.">
+<meta property="og:image" content="img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Бокал с вином на тёплом соломенном фоне и надпись «Погреб. Вино под ваш вкус»">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="fonts/prata-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/golos-text-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+  (function () {
+    var d = document.documentElement, ok = false;
+    d.classList.add('js');
+    try {
+      var v = localStorage.getItem('pogreb-age');
+      if (v === 'yes') ok = true;
+      else if (v && v.indexOf('no:') === 0 && Date.now() - Number(v.slice(3)) < 864e5) d.classList.add('age-denied');
+    } catch (e) {}
+    if (!ok) d.classList.add('age-pending');
+    var reduce = false;
+    try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+    if (!reduce) d.classList.add('flow');
+  })();
+</script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Перейти к содержанию</a>
+
+<!-- Экран 18+ (показывается только с включённым JavaScript) -->
+<div class="age" id="age" role="dialog" aria-modal="true" aria-labelledby="age-title" aria-describedby="age-text">
+  <div class="age__inner">
+    <svg class="age__mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><path d="M8 60V30C8 16 19 6 32 6s24 10 24 24v30" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M23 22h18c0 9-3 15-9 15s-9-6-9-15Z" fill="currentColor" opacity=".9"/><path d="M32 37v12M25 50h14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+    <div class="age__ask">
+      <p class="age__brand">Погреб · винный бар</p>
+      <h2 class="age__title" id="age-title">Вам есть 18&nbsp;лет?</h2>
+      <p class="age__text" id="age-text">Это сайт винного бара. По закону мы показываем его только совершеннолетним гостям.</p>
+      <div class="age__actions">
+        <button class="btn btn--solid" type="button" data-age="yes">Да, мне есть 18</button>
+        <button class="btn btn--ghost" type="button" data-age="no">Нет</button>
+      </div>
+    </div>
+    <div class="age__denied" role="status">
+      <h2 class="age__title" tabindex="-1">Тогда до встречи позже</h2>
+      <p class="age__text">Спасибо за честность. Вино подождёт — оно умеет. А пока можно почитать про виноград: это просто ягода, и она тоже прекрасна.</p>
+      <button class="btn btn--ghost btn--small" type="button" data-age="retry">Я ошибся с ответом</button>
+    </div>
+  </div>
+</div>
+
+<header class="site-header" id="header">
+  <div class="site-header__row wrap">
+    <a class="logo" href="#top" aria-label="Погреб — на главный экран">
+      <svg class="logo__mark" viewBox="0 0 40 48" aria-hidden="true" focusable="false">
+        <defs><clipPath id="mini-bowl"><path d="M12.5 15h15c0 8-3 12.5-7.5 12.5S12.5 23 12.5 15Z"/></clipPath></defs>
+        <path d="M3 46V20C3 10 10.5 3 20 3s17 7 17 17v26" fill="none" stroke="currentColor" stroke-width="2"/>
+        <rect class="logo__wine" id="mini-wine" x="10" y="15" width="20" height="14" clip-path="url(#mini-bowl)"/>
+        <path d="M12.5 15h15c0 8-3 12.5-7.5 12.5S12.5 23 12.5 15Z M20 27.5v8 M15.5 36h9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <span class="logo__word">Погреб</span>
+      <span class="logo__sub">винотека<br>и&nbsp;бар</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Основное меню">
+      <ul class="nav__list">
+        <li><a href="#pick">Подбор вина</a></li>
+        <li><a href="#list">Карта</a></li>
+        <li><a href="#dinners">Ужины</a></li>
+        <li><a href="#somm">Сомелье</a></li>
+        <li><a href="#booking">Бронь</a></li>
+      </ul>
+      <a class="btn btn--solid nav__cta-mobile" href="#booking">Забронировать стол</a>
+    </nav>
+    <a class="btn btn--solid header-cta" href="#booking">Забронировать стол</a>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Открыть меню">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- 3. HERO -->
+  <section class="hero" id="top" data-tone="straw" aria-labelledby="hero-title">
+    <div class="hero__grid wrap">
+      <div class="hero__text">
+        <p class="eyebrow">Винотека и бар&nbsp;· подвал 1890-х&nbsp;· Москва</p>
+        <h1 class="hero__title" id="hero-title">Вино под ваш вкус, аВино под ваш вкус, а&nbsp;не&nbsp;под&nbsp;этикеткуnbsp;не под этикетку</h1>
+        <p class="hero__lead">Девятнадцать вин по бокалам в сводчатом подвале, на шесть метров ниже улицы. Вы двигаете три ползунка — мы показываем, что налить. Без лекций, если вы их не просите.</p>
+        <div class="hero__actions">
+          <a class="btn btn--solid" href="#pick">Подобрать вино</a>
+          <a class="btn btn--ghost" href="#booking">Забронировать</a>
+        </div>
+      </div>
+      <figure class="hero__glass" aria-hidden="true">
+        <svg class="glass" id="glass" viewBox="0 0 300 470" focusable="false">
+          <defs>
+            <clipPath id="bowl-clip"><path d="M58 28C52 120 56 198 98 246c28 32 76 32 104 0 42-48 46-126 40-218Z"/></clipPath>
+            <linearGradient id="wine-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" class="glass__stop-top"/>
+              <stop offset="1" class="glass__stop-bottom"/>
+            </linearGradient>
+            <radialGradient id="glass-shine" cx=".3" cy=".3" r=".8">
+              <stop offset="0" stop-color="#fff" stop-opacity=".55"/>
+              <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <ellipse class="glass__shadow" cx="150" cy="452" rx="96" ry="9"/>
+          <g clip-path="url(#bowl-clip)">
+            <path id="wine-body" class="glass__wine" d="M40 170 L260 170 L260 300 L40 300Z"/>
+            <path id="wine-surface" class="glass__surface" d="M40 170 L260 170"/>
+          </g>
+          <path class="glass__bowl" d="M58 28C52 120 56 198 98 246c28 32 76 32 104 0 42-48 46-126 40-218Z"/>
+          <path class="glass__shine" d="M78 52c-4 60 0 118 26 160" />
+          <ellipse class="glass__rim" cx="150" cy="28" rx="92" ry="6"/>
+          <path class="glass__stem" d="M146 268c2 40 2 110-4 168h16c-6-58-6-128-4-168"/>
+          <path class="glass__foot" d="M74 446c18-10 52-14 76-14s58 4 76 14c-22 6-50 8-76 8s-54-2-76-8Z"/>
+        </svg>
+        <figcaption class="hero__glass-note">листайте — бокал наполнится<br>от соломенного до гранатового</figcaption>
+      </figure>
+      <dl class="hero__facts">
+        <div><dt>−6&nbsp;м</dt><dd>под уровнем улицы</dd></div>
+        <div><dt>+14&nbsp;°C</dt><dd>в погребе круглый год</dd></div>
+        <div><dt>19</dt><dd>вин по бокалам</dd></div>
+        <div><dt>34</dt><dd>места при свечах</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- 4. ПОДБОР ВИНА + КОЛЕСО АРОМАТОВ -->
+  <section class="section pick" id="pick" data-tone="pale" aria-labelledby="pick-title">
+    <div class="wrap">
+      <header class="section-head" data-reveal>
+        <p class="section-head__num"><span>01</span> подбор</p>
+        <div>
+          <h2 class="section-head__title" id="pick-title">Подбор вина по&nbsp;вкусу</h2>
+          <p class="section-head__lead">Знать сорта не нужно. Скажите, каким вино должно быть во&nbsp;рту, — карточки сами выстроятся: ближе к&nbsp;вашему вкусу — выше.</p>
+        </div>
+      </header>
+
+      <div class="pick__layout">
+        <div class="pick__panel">
+          <form class="taste" id="taste" aria-label="Параметры вкуса" onsubmit="return false">
+            <div class="taste__row">
+              <div class="taste__head">
+                <label for="r-sweet">Сухое ↔ Сладкое</label>
+                <output id="o-sweet" for="r-sweet">сухое</output>
+              </div>
+              <input type="range" id="r-sweet" name="sweet" min="0" max="10" step="1" value="2" aria-describedby="h-sweet">
+              <div class="taste__ends" aria-hidden="true"><span>сухое</span><span>сладкое</span></div>
+              <p class="visually-hidden" id="h-sweet">Сколько сахара вы любите в вине</p>
+            </div>
+            <div class="taste__row">
+              <div class="taste__head">
+                <label for="r-body">Лёгкое ↔ Плотное</label>
+                <output id="o-body" for="r-body">среднее</output>
+              </div>
+              <input type="range" id="r-body" name="body" min="0" max="10" step="1" value="5" aria-describedby="h-body">
+              <div class="taste__ends" aria-hidden="true"><span>лёгкое</span><span>плотное</span></div>
+              <p class="visually-hidden" id="h-body">Насколько насыщенным и тяжёлым должно быть вино</p>
+            </div>
+            <div class="taste__row">
+              <div class="taste__head">
+                <label for="r-soft">Свежее ↔ Мягкое</label>
+                <output id="o-soft" for="r-soft">в балансе</output>
+              </div>
+              <input type="range" id="r-soft" name="soft" min="0" max="10" step="1" value="5" aria-describedby="h-soft">
+              <div class="taste__ends" aria-hidden="true"><span>свежее</span><span>мягкое</span></div>
+              <p class="taste__hint" id="h-soft">Свежее — с бодрой кислинкой, как яблоко. Мягкое — округлое, бархатное.</p>
+            </div>
+            <fieldset class="chips">
+              <legend>Цвет <span class="chips__hint">ничего не отмечено — показываем все</span></legend>
+              <label class="chip"><input type="checkbox" name="color" value="white"><span><i class="dot dot--white" aria-hidden="true"></i>Белое</span></label>
+              <label class="chip"><input type="checkbox" name="color" value="rose"><span><i class="dot dot--rose" aria-hidden="true"></i>Розе</span></label>
+              <label class="chip"><input type="checkbox" name="color" value="red"><span><i class="dot dot--red" aria-hidden="true"></i>Красное</span></label>
+              <label class="chip"><input type="checkbox" name="color" value="sparkling"><span><i class="dot dot--sparkling" aria-hidden="true"></i>Игристое</span></label>
+            </fieldset>
+            <button class="link-btn" type="reset" id="taste-reset">Сбросить вкус</button>
+          </form>
+
+          <div class="wheel" id="wheel-block">
+            <h3 class="wheel__title">Колесо ароматов</h3>
+            <p class="wheel__hint" id="wheel-hint">Наведите или нажмите на сектор — подсветим вина с этим ароматом. Стрелками можно ходить по кругу.</p>
+            <div class="wheel__svg" id="wheel" role="group" aria-label="Ароматы" aria-describedby="wheel-hint"></div>
+            <p class="wheel__status" id="wheel-status" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div class="pick__results">
+          <p class="results__count" id="results-count" aria-live="polite">Подбор работает с&nbsp;включённым JavaScript.</p>
+          <noscript><p class="results__noscript">Без JavaScript ползунки не двигают карточки — но&nbsp;вся карта вин ниже, в&nbsp;разделе «<a href="#list">Карта</a>».</p></noscript>
+          <ul class="cards" id="cards" aria-label="Вина, отсортированные по близости к вашему вкусу"></ul>
+          <div class="empty" id="empty" hidden>
+            <svg viewBox="0 0 80 80" aria-hidden="true" focusable="false"><path d="M24 12h32c0 20-6 32-16 32S24 32 24 12Z M40 44v20 M30 66h20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <p class="empty__title">Под такой вкус ничего нет — сдвиньте ползунок.</p>
+            <p class="empty__text">Или снимите фильтр по цвету: иногда нужное вино просто другого цвета, чем вы думали.</p>
+            <button class="btn btn--ghost btn--small" type="button" id="empty-reset">Вернуть как было</button>
+          </div>
+          <p class="legal-note">Чрезмерное употребление алкоголя вредит вашему здоровью. <b>18+</b></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- КАРТА ВИН (статичный список — читается и без JavaScript) -->
+  <section class="section winelist" id="list" data-tone="blush" aria-labelledby="list-title">
+    <div class="wrap">
+      <header class="section-head" data-reveal>
+        <p class="section-head__num"><span>02</span> карта</p>
+        <div>
+          <h2 class="section-head__title" id="list-title">Карта вин</h2>
+          <p class="section-head__lead">Цены за бокал 125&nbsp;мл и за бутылку, открытую в зале. Вино не продаём на вынос и не доставляем — только наливаем здесь, под сводами.</p>
+        </div>
+      </header>
+      <div class="winelist__cols">
+<!-- WINE-LIST:START -->
+        <div class="winelist__group" data-reveal>
+          <h3 class="winelist__h"><i class="dot dot--white" aria-hidden="true"></i>Белое</h3>
+          <p class="winelist__legend" aria-hidden="true"><span>бокал</span><span>бутылка</span></p>
+          <ul class="winelist__items">
+            <li class="wl"><span class="wl__name">Сланцевый склон</span><span class="wl__meta">Рислинг · Мозель, Германия · 2022</span><span class="wl__price"><span class="visually-hidden">бокал </span>790 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>4 200 ₽</span></li>
+            <li class="wl"><span class="wl__name">Утро на Луаре</span><span class="wl__meta">Совиньон блан · Луара, Франция · 2023</span><span class="wl__price"><span class="visually-hidden">бокал </span>850 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>4 600 ₽</span></li>
+            <li class="wl"><span class="wl__name">Тёплый погреб</span><span class="wl__meta">Шардоне · Бургундия, Франция · 2021</span><span class="wl__price"><span class="visually-hidden">бокал </span>1 150 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>6 400 ₽</span></li>
+            <li class="wl"><span class="wl__name">Янтарь из квеври</span><span class="wl__meta">Ркацители · Кахетия, Грузия · 2022</span><span class="wl__price"><span class="visually-hidden">бокал </span>890 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>4 800 ₽</span></li>
+            <li class="wl"><span class="wl__name">Розовый сад</span><span class="wl__meta">Гевюрцтраминер · Эльзас, Франция · 2022</span><span class="wl__price"><span class="visually-hidden">бокал </span>950 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>5 200 ₽</span></li>
+            <li class="wl"><span class="wl__name">Донская степь</span><span class="wl__meta">Сибирьковый · Долина Дона, Россия · 2023</span><span class="wl__price"><span class="visually-hidden">бокал </span>650 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>3 300 ₽</span></li>
+          </ul>
+        </div>
+        <div class="winelist__group" data-reveal>
+          <h3 class="winelist__h"><i class="dot dot--rose" aria-hidden="true"></i>Розе</h3>
+          <p class="winelist__legend" aria-hidden="true"><span>бокал</span><span>бутылка</span></p>
+          <ul class="winelist__items">
+            <li class="wl"><span class="wl__name">Тень сосны</span><span class="wl__meta">Гренаш, Сенсо · Прованс, Франция · 2023</span><span class="wl__price"><span class="visually-hidden">бокал </span>820 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>4 400 ₽</span></li>
+            <li class="wl"><span class="wl__name">Кубанский закат</span><span class="wl__meta">Пино нуар · Кубань, Россия · 2023</span><span class="wl__price"><span class="visually-hidden">бокал </span>690 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>3 600 ₽</span></li>
+            <li class="wl"><span class="wl__name">Персиковый час</span><span class="wl__meta">Каберне фран · Луара, Франция · 2023</span><span class="wl__price"><span class="visually-hidden">бокал </span>720 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>3 800 ₽</span></li>
+          </ul>
+        </div>
+        <div class="winelist__group" data-reveal>
+          <h3 class="winelist__h"><i class="dot dot--red" aria-hidden="true"></i>Красное</h3>
+          <p class="winelist__legend" aria-hidden="true"><span>бокал</span><span>бутылка</span></p>
+          <ul class="winelist__items">
+            <li class="wl"><span class="wl__name">Тихая лоза</span><span class="wl__meta">Пино нуар · Бургундия, Франция · 2020</span><span class="wl__price"><span class="visually-hidden">бокал </span>1 450 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>8 900 ₽</span></li>
+            <li class="wl"><span class="wl__name">Туман над холмами</span><span class="wl__meta">Неббиоло · Пьемонт, Италия · 2018</span><span class="wl__price"><span class="visually-hidden">бокал </span>1 390 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>9 800 ₽</span></li>
+            <li class="wl"><span class="wl__name">Южный ветер</span><span class="wl__meta">Мальбек · Мендоса, Аргентина · 2021</span><span class="wl__price"><span class="visually-hidden">бокал </span>890 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>4 900 ₽</span></li>
+            <li class="wl"><span class="wl__name">Чёрный камень</span><span class="wl__meta">Саперави · Кахетия, Грузия · 2020</span><span class="wl__price"><span class="visually-hidden">бокал </span>790 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>4 300 ₽</span></li>
+            <li class="wl"><span class="wl__name">Гранатовый вечер</span><span class="wl__meta">Саперави · Кахетия, Грузия · 2022</span><span class="wl__price"><span class="visually-hidden">бокал </span>690 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>3 500 ₽</span></li>
+            <li class="wl"><span class="wl__name">Золотовский хутор</span><span class="wl__meta">Красностоп золотовский · Долина Дона, Россия · 2019</span><span class="wl__price"><span class="visually-hidden">бокал </span>950 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>5 400 ₽</span></li>
+            <li class="wl"><span class="wl__name">Лёгкая рука</span><span class="wl__meta">Гамэ · Божоле, Франция · 2023</span><span class="wl__price"><span class="visually-hidden">бокал </span>750 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>3 900 ₽</span></li>
+            <li class="wl"><span class="wl__name">Перечная долина</span><span class="wl__meta">Сира · Северная Рона, Франция · 2019</span><span class="wl__price"><span class="visually-hidden">бокал </span>1 290 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>7 600 ₽</span></li>
+          </ul>
+        </div>
+        <div class="winelist__group" data-reveal>
+          <h3 class="winelist__h"><i class="dot dot--sparkling" aria-hidden="true"></i>Игристое</h3>
+          <p class="winelist__legend" aria-hidden="true"><span>бокал</span><span>бутылка</span></p>
+          <ul class="winelist__items">
+            <li class="wl"><span class="wl__name">Первый снег</span><span class="wl__meta">Шардоне, Пино нуар · Кубань, Россия · 2020</span><span class="wl__price"><span class="visually-hidden">бокал </span>850 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>4 700 ₽</span></li>
+            <li class="wl"><span class="wl__name">Летний полдень</span><span class="wl__meta">Москато · Пьемонт, Италия · 2023</span><span class="wl__price"><span class="visually-hidden">бокал </span>690 ₽</span><span class="wl__price"><span class="visually-hidden">бутылка в зале </span>3 600 ₽</span></li>
+          </ul>
+        </div>
+<!-- WINE-LIST:END -->
+      </div>
+      <p class="legal-note legal-note--big">Чрезмерное употребление алкоголя вредит вашему здоровью. <b>18+</b></p>
+    </div>
+  </section>
+
+  <!-- 5. ВИННЫЕ УЖИНЫ -->
+  <section class="section dinners" id="dinners" data-tone="rose" aria-labelledby="dinners-title">
+    <div class="wrap">
+      <header class="section-head" data-reveal>
+        <p class="section-head__num"><span>03</span> ужины</p>
+        <div>
+          <h2 class="section-head__title" id="dinners-title">Винные ужины</h2>
+          <p class="section-head__lead">Длинный дубовый стол на двенадцать человек, пять бокалов и закуска к каждому. Ведёт Лидия, наш сомелье, — рассказывает ровно столько, сколько вам интересно.</p>
+        </div>
+      </header>
+      <ol class="dinner-list" id="dinner-list">
+        <li class="dinner" data-dinner="0" data-reveal>
+          <p class="dinner__date"><span class="dinner__day">12</span><span class="dinner__month">ноября</span><span class="dinner__wd">чт, 19:30</span></p>
+          <div class="dinner__body">
+            <h3 class="dinner__title">Грузия без глянца</h3>
+            <p class="dinner__set"><b>5 бокалов:</b> янтарные вина из квеври, ркацители, мцване, саперави сухое и полусладкое.<br><b>Закуски:</b> пхали, сулугуни с углей, мчади, аджика.</p>
+          </div>
+          <div class="dinner__side">
+            <p class="dinner__price">4&nbsp;900&nbsp;₽</p>
+            <p class="dinner__seats" data-seats="7">осталось 7 мест</p>
+            <button class="btn btn--ghost btn--small" type="button" data-signup="0">Записаться</button>
+          </div>
+        </li>
+        <li class="dinner" data-dinner="1" data-reveal>
+          <p class="dinner__date"><span class="dinner__day">14</span><span class="dinner__month">ноября</span><span class="dinner__wd">сб, 19:30</span></p>
+          <div class="dinner__body">
+            <h3 class="dinner__title">Дон: свои сорта</h3>
+            <p class="dinner__set"><b>5 бокалов:</b> сибирьковый, цимлянский чёрный, красностоп, плечистик и донское игристое.<br><b>Закуски:</b> вяленый рыбец, каймак с зеленью, пирожки с капустой.</p>
+          </div>
+          <div class="dinner__side">
+            <p class="dinner__price">4&nbsp;500&nbsp;₽</p>
+            <p class="dinner__seats" data-seats="3">осталось 3 места</p>
+            <button class="btn btn--ghost btn--small" type="button" data-signup="1">Записаться</button>
+          </div>
+        </li>
+        <li class="dinner" data-dinner="2" data-reveal>
+          <p class="dinner__date"><span class="dinner__day">19</span><span class="dinner__month">ноября</span><span class="dinner__wd">чт, 19:30</span></p>
+          <div class="dinner__body">
+            <h3 class="dinner__title">Пино нуар: один сорт, три характера</h3>
+            <p class="dinner__set"><b>5 бокалов:</b> Бургундия, Кубань, Новая Зеландия, розе и игристое из пино.<br><b>Закуски:</b> утиный паштет, грибы на углях, козий сыр с инжиром.</p>
+          </div>
+          <div class="dinner__side">
+            <p class="dinner__price">5&nbsp;900&nbsp;₽</p>
+            <p class="dinner__seats" data-seats="9">осталось 9 мест</p>
+            <button class="btn btn--ghost btn--small" type="button" data-signup="2">Записаться</button>
+          </div>
+        </li>
+        <li class="dinner" data-dinner="3" data-reveal>
+          <p class="dinner__date"><span class="dinner__day">21</span><span class="dinner__month">ноября</span><span class="dinner__wd">сб, 19:30</span></p>
+          <div class="dinner__body">
+            <h3 class="dinner__title">Пузырьки и солёное</h3>
+            <p class="dinner__set"><b>5 бокалов:</b> игристые традиционного метода — от брюта без дозажа до выдержанного розового.<br><b>Закуски:</b> картофель фри, темпура из креветок, устрицы, пармезан.</p>
+          </div>
+          <div class="dinner__side">
+            <p class="dinner__price">5&nbsp;400&nbsp;₽</p>
+            <p class="dinner__seats" data-seats="2">осталось 2 места</p>
+            <button class="btn btn--ghost btn--small" type="button" data-signup="3">Записаться</button>
+          </div>
+        </li>
+        <li class="dinner" data-dinner="4" data-reveal>
+          <p class="dinner__date"><span class="dinner__day">26</span><span class="dinner__month">ноября</span><span class="dinner__wd">чт, 19:30</span></p>
+          <div class="dinner__body">
+            <h3 class="dinner__title">Сыр решает</h3>
+            <p class="dinner__set"><b>5 бокалов</b> к&nbsp;пяти сырам — от свежего козьего до&nbsp;голубого. Ищем пары, которые спорят, и&nbsp;пары, которые дружат.<br><b>Закуски:</b> сырная доска, мёд с орехами, груша, ржаной хлеб.</p>
+          </div>
+          <div class="dinner__side">
+            <p class="dinner__price">4&nbsp;700&nbsp;₽</p>
+            <p class="dinner__seats" data-seats="6">осталось 6 мест</p>
+            <button class="btn btn--ghost btn--small" type="button" data-signup="4">Записаться</button>
+          </div>
+        </li>
+        <li class="dinner" data-dinner="5" data-reveal>
+          <p class="dinner__date"><span class="dinner__day">28</span><span class="dinner__month">ноября</span><span class="dinner__wd">сб, 19:30</span></p>
+          <div class="dinner__body">
+            <h3 class="dinner__title">Вслепую</h3>
+            <p class="dinner__set"><b>5 бокалов</b> в чёрном стекле, без этикеток. Угадываем сорт, страну и год — правильных ответов меньше, чем кажется.<br><b>Закуски:</b> брускетты, оливки, тартар из говядины.</p>
+          </div>
+          <div class="dinner__side">
+            <p class="dinner__price">5&nbsp;200&nbsp;₽</p>
+            <p class="dinner__seats" data-seats="12">осталось 12 мест</p>
+            <button class="btn btn--ghost btn--small" type="button" data-signup="5">Записаться</button>
+          </div>
+        </li>
+      </ol>
+      <p class="dinners__note">Ужин длится около двух с половиной часов. Цена — за одного гостя, всё включено.</p>
+    </div>
+  </section>
+
+  <!-- 6. СОМЕЛЬЕ -->
+  <section class="section somm" id="somm" data-tone="garnet" aria-labelledby="somm-title">
+    <div class="wrap somm__grid">
+      <header class="section-head section-head--stack" data-reveal>
+        <p class="section-head__num"><span>04</span> сомелье</p>
+        <h2 class="section-head__title" id="somm-title">Лидия Жаворонкова</h2>
+        <p class="somm__role">сомелье и совладелица «Погреба»</p>
+      </header>
+      <figure class="somm__portrait" aria-hidden="true" data-reveal>
+        <svg viewBox="0 0 320 400" focusable="false">
+          <path class="somm__arch" d="M20 392V160C20 82 82 20 160 20s140 62 140 140v232Z"/>
+          <path class="somm__arch-line" d="M40 392V162C40 96 94 40 160 40s120 56 120 122v230" />
+          <g class="somm__notebook">
+            <rect x="78" y="150" width="164" height="206" rx="4"/>
+            <path d="M98 186h96 M98 206h124 M98 226h80 M98 262h112 M98 282h70 M98 318h120"/>
+            <circle cx="214" cy="186" r="9"/>
+          </g>
+          <text class="somm__mono" x="160" y="122" text-anchor="middle">ЛЖ</text>
+        </svg>
+      </figure>
+      <div class="somm__text" data-reveal>
+        <p>Десять лет Лидия была геологом и описывала породы в&nbsp;экспедициях. Потом поняла, что почва интереснее всего в&nbsp;бокале, — и&nbsp;сменила молоток на&nbsp;штопор.</p>
+        <p>Не любит слово «терруар» без объяснений, путешествует по&nbsp;маленьким хозяйствам Дона и&nbsp;Кахетии и&nbsp;всегда спрашивает, что вы ели на&nbsp;ужин, прежде чем что-то советовать.</p>
+        <blockquote class="somm__quote"><p>Хорошее вино — то, которое понравилось вам. Всё остальное — подробности, и&nbsp;я с&nbsp;радостью их расскажу.</p></blockquote>
+      </div>
+      <div class="somm__picks" data-reveal>
+        <h3 class="somm__picks-title">3 вина, которые я&nbsp;бы взяла сегодня</h3>
+        <ol class="picks">
+          <li><a href="#wine-don-steppe" data-wine-link="don-steppe"><span class="picks__name">Донская степь</span><span class="picks__meta">Сибирьковый, Долина Дона</span></a><p>Пахнет полынью после дождя. Лучшее, что можно налить к&nbsp;рыбе с&nbsp;углей.</p></li>
+          <li><a href="#wine-kvevri-amber" data-wine-link="kvevri-amber"><span class="picks__name">Янтарь из квеври</span><span class="picks__meta">Ркацители, Кахетия</span></a><p>Белое, которое ведёт себя как красное. Для тех, кто «не любит белое».</p></li>
+          <li><a href="#wine-zolotovsky" data-wine-link="zolotovsky"><span class="picks__name">Золотовский хутор</span><span class="picks__meta">Красностоп, Долина Дона</span></a><p>Смородиновый лист и&nbsp;гвоздика. Наш ответ на&nbsp;вопрос «а&nbsp;что есть своё?».</p></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. ЗАЛ -->
+  <section class="section hall" id="hall" data-tone="bordo" aria-labelledby="hall-title">
+    <div class="wrap">
+      <header class="section-head" data-reveal>
+        <p class="section-head__num"><span>05</span> зал</p>
+        <div>
+          <h2 class="section-head__title" id="hall-title">Зал под сводами</h2>
+          <p class="section-head__lead">Подвал купеческого дома 1890-х: красный кирпич, три арки, свеча на каждом столе. Музыка тише разговора.</p>
+        </div>
+      </header>
+      <figure class="hall__art" data-reveal>
+        <svg viewBox="0 0 1200 520" role="img" aria-labelledby="hall-art-title" focusable="false" preserveAspectRatio="xMidYMid meet">
+          <title id="hall-art-title">Иллюстрация: три кирпичные арки подвала, под ними столы со свечами и стеллажи с бутылками</title>
+          <defs>
+            <pattern id="brick" width="48" height="24" patternUnits="userSpaceOnUse">
+              <rect width="48" height="24" class="hall__brick-bg"/>
+              <path d="M0 .5h48M0 12.5h48M24 0v12M0 12v12M48 12v12" class="hall__brick-line"/>
+            </pattern>
+            <radialGradient id="candle-glow" cx=".5" cy=".5" r=".5">
+              <stop offset="0" stop-color="#ffcf7a" stop-opacity=".55"/>
+              <stop offset=".45" stop-color="#ff9a3c" stop-opacity=".18"/>
+              <stop offset="1" stop-color="#ff9a3c" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect width="1200" height="520" fill="url(#brick)"/>
+          <!-- три арки -->
+          <path class="hall__void" d="M40 520V250C40 150 120 80 220 80s180 70 180 170v270Z M440 520V230C440 120 515 50 600 50s160 70 160 180v290Z M800 520V250C800 150 880 80 980 80s180 70 180 170v270Z"/>
+          <path class="hall__arch-edge" d="M40 520V250C40 150 120 80 220 80s180 70 180 170v270 M440 520V230C440 120 515 50 600 50s160 70 160 180v290 M800 520V250C800 150 880 80 980 80s180 70 180 170v270"/>
+          <!-- стеллаж в центральной арке -->
+          <g class="hall__rack">
+            <path d="M480 200h240M480 260h240M480 320h240M480 380h240" />
+            <g class="hall__bottles">
+              <circle cx="498" cy="230" r="11"/><circle cx="526" cy="230" r="11"/><circle cx="554" cy="230" r="11"/><circle cx="582" cy="230" r="11"/><circle cx="618" cy="230" r="11"/><circle cx="646" cy="230" r="11"/><circle cx="674" cy="230" r="11"/><circle cx="702" cy="230" r="11"/>
+              <circle cx="498" cy="290" r="11"/><circle cx="526" cy="290" r="11"/><circle cx="582" cy="290" r="11"/><circle cx="610" cy="290" r="11"/><circle cx="638" cy="290" r="11"/><circle cx="702" cy="290" r="11"/>
+              <circle cx="512" cy="350" r="11"/><circle cx="540" cy="350" r="11"/><circle cx="568" cy="350" r="11"/><circle cx="596" cy="350" r="11"/><circle cx="652" cy="350" r="11"/><circle cx="680" cy="350" r="11"/>
+            </g>
+          </g>
+          <!-- столы и свечи -->
+          <g class="hall__tables">
+            <path d="M110 430h220M150 430v90M290 430v90 M860 430h240M900 430v90M1060 430v90 M450 452h300M480 452v68M720 452v68"/>
+          </g>
+          <g class="candle" style="--d:0s"><circle class="candle__glow" cx="220" cy="398" r="70" fill="url(#candle-glow)"/><rect class="candle__wax" x="214" y="404" width="12" height="26"/><path class="candle__flame" d="M220 382c6 8 7 14 0 20-7-6-6-12 0-20Z"/></g>
+          <g class="candle" style="--d:-.7s"><circle class="candle__glow" cx="980" cy="398" r="70" fill="url(#candle-glow)"/><rect class="candle__wax" x="974" y="404" width="12" height="26"/><path class="candle__flame" d="M980 382c6 8 7 14 0 20-7-6-6-12 0-20Z"/></g>
+          <g class="candle" style="--d:-1.3s"><circle class="candle__glow" cx="560" cy="420" r="64" fill="url(#candle-glow)"/><rect class="candle__wax" x="554" y="426" width="12" height="26"/><path class="candle__flame" d="M560 404c6 8 7 14 0 20-7-6-6-12 0-20Z"/></g>
+          <g class="candle" style="--d:-.35s"><circle class="candle__glow" cx="650" cy="420" r="64" fill="url(#candle-glow)"/><rect class="candle__wax" x="644" y="426" width="12" height="26"/><path class="candle__flame" d="M650 404c6 8 7 14 0 20-7-6-6-12 0-20Z"/></g>
+        </svg>
+      </figure>
+      <ul class="hall__facts">
+        <li data-reveal><b>9 столов, 34 места</b><span>Уютно на 2–8 человек. Для пары — ниша у стены, для компании — круглый стол под средней аркой.</span></li>
+        <li data-reveal><b>Длинный стол на 12</b><span>Дуб, свечи в ряд. По четвергам и субботам на нём проходят ужины, в остальные дни его можно забрать под свой повод.</span></li>
+        <li data-reveal><b>+21 °C в зале</b><span>А в погребе за стеклом — ровные +14 круглый год. Плед на спинке стула — не для красоты.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 8. БРОНЬ -->
+  <section class="section booking" id="booking" data-tone="deep" aria-labelledby="booking-title">
+    <div class="wrap booking__grid">
+      <header class="section-head section-head--stack" data-reveal>
+        <p class="section-head__num"><span>06</span> бронь</p>
+        <h2 class="section-head__title" id="booking-title">Бронь стола</h2>
+        <ul class="booking__notes">
+          <li>Держим стол 15 минут после назначенного времени.</li>
+          <li>Компанию больше восьми посадим за длинный стол — напишите об этом в пожеланиях.</li>
+          <li>Это концепт: заявка никуда не отправляется, звонить не будем.</li>
+        </ul>
+      </header>
+
+      <div class="booking__box">
+        <form class="form" id="booking-form" novalidate>
+          <div class="form__grid">
+            <div class="field">
+              <label for="b-date">Дата</label>
+              <input type="date" id="b-date" name="date" required aria-describedby="b-date-err">
+              <p class="field__err" id="b-date-err" hidden></p>
+            </div>
+            <div class="field field--guests">
+              <span class="field__label" id="b-guests-label">Гостей</span>
+              <div class="stepper" role="group" aria-labelledby="b-guests-label">
+                <button type="button" class="stepper__btn" data-step="-1" aria-label="Меньше гостей">−</button>
+                <input type="number" id="b-guests" name="guests" min="1" max="8" value="2" inputmode="numeric" aria-labelledby="b-guests-label" aria-describedby="b-guests-err">
+                <button type="button" class="stepper__btn" data-step="1" aria-label="Больше гостей">+</button>
+              </div>
+              <p class="field__err" id="b-guests-err" hidden></p>
+            </div>
+          </div>
+
+          <fieldset class="field slots" aria-describedby="b-time-err">
+            <legend>Время</legend>
+            <div class="slots__list" id="slots">
+              <label class="slot"><input type="radio" name="time" value="18:00"><span>18:00</span></label>
+              <label class="slot"><input type="radio" name="time" value="18:30"><span>18:30</span></label>
+              <label class="slot"><input type="radio" name="time" value="19:00"><span>19:00</span></label>
+              <label class="slot"><input type="radio" name="time" value="19:30"><span>19:30</span></label>
+              <label class="slot"><input type="radio" name="time" value="20:00"><span>20:00</span></label>
+              <label class="slot"><input type="radio" name="time" value="20:30"><span>20:30</span></label>
+              <label class="slot"><input type="radio" name="time" value="21:00"><span>21:00</span></label>
+              <label class="slot"><input type="radio" name="time" value="21:30"><span>21:30</span></label>
+              <label class="slot"><input type="radio" name="time" value="22:00"><span>22:00</span></label>
+            </div>
+            <p class="slots__hint" id="slots-hint">Зачёркнутое время уже занято.</p>
+            <p class="field__err" id="b-time-err" hidden></p>
+          </fieldset>
+
+          <div class="form__grid">
+            <div class="field">
+              <label for="b-name">Имя</label>
+              <input type="text" id="b-name" name="name" autocomplete="given-name" required maxlength="40" aria-describedby="b-name-err">
+              <p class="field__err" id="b-name-err" hidden></p>
+            </div>
+            <div class="field">
+              <label for="b-phone">Телефон</label>
+              <input type="tel" id="b-phone" name="phone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" required aria-describedby="b-phone-err">
+              <p class="field__err" id="b-phone-err" hidden></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="b-wish">Пожелания <span class="field__opt">— необязательно</span></label>
+            <textarea id="b-wish" name="wish" rows="3" maxlength="300" aria-describedby="b-wish-count"></textarea>
+            <p class="field__count" id="b-wish-count">0 / 300</p>
+          </div>
+
+          <button class="btn btn--solid btn--wide" type="submit">Забронировать стол</button>
+          <p class="form__fine">Нажимая кнопку, вы ничего не отправляете: это демонстрация интерфейса.</p>
+        </form>
+
+        <div class="done" id="booking-done" hidden tabindex="-1">
+          <p class="done__badge">Демо</p>
+          <h3 class="done__title">Бронь принята (демо)</h3>
+          <p class="done__summary" id="booking-summary"></p>
+          <p class="done__text">В настоящем «Погребе» здесь пришло бы SMS. В концепте заявка никуда не ушла — она живёт только в этой вкладке.</p>
+          <button class="btn btn--ghost btn--small" type="button" id="booking-again">Изменить бронь</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 9. ПОДВАЛ -->
+<footer class="footer" data-tone="cellar">
+  <div class="wrap footer__grid">
+    <div class="footer__brand">
+      <p class="footer__logo">Погреб</p>
+      <p>Винотека и бар под сводами</p>
+    </div>
+    <div>
+      <h2 class="footer__h">Где</h2>
+      <p>Москва, Винный переулок, 0,<br>вход со двора, двенадцать ступеней вниз.</p>
+      <p class="footer__muted">Адрес вымышленный — как и сам бар.</p>
+    </div>
+    <div>
+      <h2 class="footer__h">Когда</h2>
+      <dl class="hours">
+        <div><dt>Вт–Чт</dt><dd>17:00–00:00</dd></div>
+        <div><dt>Пт–Сб</dt><dd>17:00–02:00</dd></div>
+        <div><dt>Вс</dt><dd>15:00–23:00</dd></div>
+        <div><dt>Пн</dt><dd>отдыхаем</dd></div>
+      </dl>
+    </div>
+    <div class="footer__legal">
+      <p class="footer__warn">Чрезмерное употребление алкоголя вредит вашему здоровью</p>
+      <p class="badge18" aria-label="Только для лиц старше 18 лет">18+</p>
+    </div>
+  </div>
+  <div class="wrap footer__concept">
+    <p>Концепт-проект. Бренд вымышленный. Дизайн и разработка — <a href="https://viachkovdesign.github.io">ViachKovDesign</a></p>
+  </div>
+</footer>
+
+<!-- Запись на ужин -->
+<dialog class="modal" id="dinner-dialog" aria-labelledby="dd-title">
+  <div class="modal__inner">
+    <button class="modal__close" type="button" data-close aria-label="Закрыть">×</button>
+    <form class="form" id="dinner-form" novalidate>
+      <h2 class="modal__title" id="dd-title">Запись на ужин</h2>
+      <p class="modal__lead" id="dd-lead"></p>
+      <div class="field">
+        <label for="d-dinner">Вечер</label>
+        <select id="d-dinner" name="dinner"></select>
+      </div>
+      <div class="form__grid">
+        <div class="field">
+          <label for="d-guests">Сколько мест</label>
+          <select id="d-guests" name="guests"></select>
+        </div>
+        <div class="field">
+          <label for="d-name">Имя</label>
+          <input type="text" id="d-name" name="name" autocomplete="given-name" required maxlength="40" aria-describedby="d-name-err">
+          <p class="field__err" id="d-name-err" hidden></p>
+        </div>
+      </div>
+      <div class="field">
+        <label for="d-phone">Телефон</label>
+        <input type="tel" id="d-phone" name="phone" autocomplete="tel" inputmode="tel" placeholder="+7 (___) ___-__-__" required aria-describedby="d-phone-err">
+        <p class="field__err" id="d-phone-err" hidden></p>
+      </div>
+      <button class="btn btn--solid btn--wide" type="submit">Записаться</button>
+      <p class="form__fine">Демо: никуда не отправляется.</p>
+    </form>
+    <div class="done" id="dinner-done" hidden tabindex="-1">
+      <p class="done__badge">Демо</p>
+      <h2 class="done__title">Бронь принята (демо)</h2>
+      <p class="done__summary" id="dinner-summary"></p>
+      <button class="btn btn--ghost btn--small" type="button" data-close>Закрыть</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- WINE-DATA:START -->
+<script type="application/json" id="wines-inline">{"aromas":{"fruit":"Фрукты","berry":"Ягоды","flower":"Цветы","herb":"Травы","spice":"Специи","wood":"Дерево","earth":"Земля и камень","pastry":"Выпечка и орехи"},"colors":{"white":"Белое","rose":"Розе","red":"Красное","sparkling":"Игристое"},"wines":[{"id":"slanec","name":"Сланцевый склон","color":"white","grape":"Рислинг","region":"Мозель, Германия","year":2022,"sweet":4,"body":2,"soft":2,"aromas":["fruit","earth","flower"],"smell":"зелёное яблоко, лайм, мокрый камень","pair":"тайский салат с манго, копчёная скумбрия","temp":"8–10 °C","glass":790,"bottle":4200},{"id":"loire-morning","name":"Утро на Луаре","color":"white","grape":"Совиньон блан","region":"Луара, Франция","year":2023,"sweet":0,"body":3,"soft":1,"aromas":["herb","fruit","earth"],"smell":"крыжовник, скошенная трава, кремень","pair":"козий сыр, салат с зеленью, устрицы","temp":"8–10 °C","glass":850,"bottle":4600},{"id":"warm-cellar","name":"Тёплый погреб","color":"white","grape":"Шардоне","region":"Бургундия, Франция","year":2021,"sweet":1,"body":6,"soft":7,"aromas":["fruit","wood","pastry"],"smell":"печёная груша, сливочное масло, тёплый тост","pair":"палтус в сливочном соусе, курица с грибами","temp":"11–13 °C","glass":1150,"bottle":6400},{"id":"kvevri-amber","name":"Янтарь из квеври","color":"white","grape":"Ркацители","region":"Кахетия, Грузия","year":2022,"sweet":0,"body":6,"soft":3,"aromas":["fruit","spice","pastry"],"smell":"сушёная айва, грецкий орех, чайный лист","pair":"сулугуни, пхали, жареные баклажаны с орехами","temp":"12–14 °C","glass":890,"bottle":4800},{"id":"rose-garden","name":"Розовый сад","color":"white","grape":"Гевюрцтраминер","region":"Эльзас, Франция","year":2022,"sweet":5,"body":6,"soft":8,"aromas":["flower","fruit","spice"],"smell":"роза, личи, свежий имбирь","pair":"утка с пятью специями, мягкие сыры с корочкой","temp":"9–11 °C","glass":950,"bottle":5200},{"id":"don-steppe","name":"Донская степь","color":"white","grape":"Сибирьковый","region":"Долина Дона, Россия","year":2023,"sweet":1,"body":3,"soft":3,"aromas":["herb","fruit","flower"],"smell":"полынь, жёлтое яблоко, луговые цветы","pair":"раки, судак на гриле, молодой сыр","temp":"8–10 °C","glass":650,"bottle":3300},{"id":"pine-shade","name":"Тень сосны","color":"rose","grape":"Гренаш, Сенсо","region":"Прованс, Франция","year":2023,"sweet":1,"body":2,"soft":3,"aromas":["berry","herb","flower"],"smell":"клубника, грейпфрут, сухие травы","pair":"салат с тунцом и оливками, креветки","temp":"8–10 °C","glass":820,"bottle":4400},{"id":"kuban-sunset","name":"Кубанский закат","color":"rose","grape":"Пино нуар","region":"Кубань, Россия","year":2023,"sweet":3,"body":3,"soft":5,"aromas":["berry","fruit"],"smell":"малина, арбуз, белый персик","pair":"тартар из лосося, брускетты с томатами","temp":"8–10 °C","glass":690,"bottle":3600},{"id":"peach-hour","name":"Персиковый час","color":"rose","grape":"Каберне фран","region":"Луара, Франция","year":2023,"sweet":6,"body":3,"soft":6,"aromas":["berry","fruit","flower"],"smell":"земляника, персик, фиалка","pair":"острые роллы, фруктовый тарт","temp":"8–10 °C","glass":720,"bottle":3800},{"id":"quiet-vine","name":"Тихая лоза","color":"red","grape":"Пино нуар","region":"Бургундия, Франция","year":2020,"sweet":0,"body":4,"soft":5,"aromas":["berry","earth","flower"],"smell":"вишня, лесная подстилка, фиалка","pair":"утиная грудка, ризотто с белыми грибами","temp":"15–16 °C","glass":1450,"bottle":8900},{"id":"hill-fog","name":"Туман над холмами","color":"red","grape":"Неббиоло","region":"Пьемонт, Италия","year":2018,"sweet":0,"body":8,"soft":2,"aromas":["flower","earth","spice","berry"],"smell":"сушёная роза, дёготь, кислая вишня","pair":"паста с трюфелем, томлёная говядина","temp":"16–18 °C","glass":1390,"bottle":9800},{"id":"south-wind","name":"Южный ветер","color":"red","grape":"Мальбек","region":"Мендоса, Аргентина","year":2021,"sweet":1,"body":8,"soft":8,"aromas":["berry","spice","wood"],"smell":"ежевика, слива, ваниль, какао","pair":"стейк на углях, чоризо","temp":"16–18 °C","glass":890,"bottle":4900},{"id":"black-stone","name":"Чёрный камень","color":"red","grape":"Саперави","region":"Кахетия, Грузия","year":2020,"sweet":0,"body":9,"soft":4,"aromas":["berry","spice","earth"],"smell":"черника, чёрный перец, гранатовая корка","pair":"шашлык из баранины, чашушули","temp":"16–18 °C","glass":790,"bottle":4300},{"id":"garnet-evening","name":"Гранатовый вечер","color":"red","grape":"Саперави","region":"Кахетия, Грузия","year":2022,"sweet":7,"body":6,"soft":8,"aromas":["berry","fruit"],"smell":"спелая вишня, гранат, чернослив","pair":"сыры с мёдом, шоколадный фондан","temp":"14–16 °C","glass":690,"bottle":3500},{"id":"zolotovsky","name":"Золотовский хутор","color":"red","grape":"Красностоп золотовский","region":"Долина Дона, Россия","year":2019,"sweet":0,"body":7,"soft":3,"aromas":["berry","spice","wood","herb"],"smell":"чёрная смородина, гвоздика, смородиновый лист","pair":"утка с яблоками, вяленая говядина","temp":"16–18 °C","glass":950,"bottle":5400},{"id":"light-hand","name":"Лёгкая рука","color":"red","grape":"Гамэ","region":"Божоле, Франция","year":2023,"sweet":1,"body":2,"soft":4,"aromas":["berry","flower"],"smell":"клюква, малина, пион","pair":"куриный паштет, пицца, жареная курица","temp":"13–14 °C","glass":750,"bottle":3900},{"id":"pepper-valley","name":"Перечная долина","color":"red","grape":"Сира","region":"Северная Рона, Франция","year":2019,"sweet":0,"body":8,"soft":5,"aromas":["spice","berry","earth"],"smell":"белый перец, ежевика, вяленое мясо","pair":"ягнёнок с розмарином, грибы на углях","temp":"16–18 °C","glass":1290,"bottle":7600},{"id":"first-snow","name":"Первый снег","color":"sparkling","grape":"Шардоне, Пино нуар","region":"Кубань, Россия","year":2020,"sweet":1,"body":4,"soft":4,"aromas":["pastry","fruit"],"smell":"бриошь, зелёное яблоко, миндаль","pair":"устрицы, темпура, картофель фри","temp":"6–8 °C","glass":850,"bottle":4700},{"id":"noon","name":"Летний полдень","color":"sparkling","grape":"Москато","region":"Пьемонт, Италия","year":2023,"sweet":8,"body":1,"soft":6,"aromas":["flower","fruit"],"smell":"белый персик, цветы апельсина, мускат","pair":"фруктовый салат, панна-котта","temp":"6–8 °C","glass":690,"bottle":3600}]}</script>
+<!-- WINE-DATA:END -->
+<script src="js/color.js" defer></script>
+<script src="vendor/gsap.min.js" defer></script>
+<script src="vendor/ScrollTrigger.min.js" defer></script>
+<script src="js/app.js" defer></script>
+</body>
+</html>
