@@ -236,6 +236,7 @@
       : 'Нашлось <b>0</b> из ' + wines.length + '.';
     emptyEl.hidden = visible.length > 0;
     applyAroma(aromaShown());
+    renderStatus();
   }
 
   function resetTaste(values, keepColors) {
@@ -311,7 +312,7 @@
       var c = pt(rl, i * step);
       var count = wines.filter(function (w) { return w.aromas.indexOf(k) > -1; }).length;
       var words = DATA.aromas[k].split(' ');
-      var lines = words.length > 2 ? [words.slice(0, 2).join(' '), words.slice(2).join(' ')] : [DATA.aromas[k]];
+      var lines = words.length > 2 ? [words[0], words.slice(1).join(' ')] : [DATA.aromas[k]];
       var text = lines.map(function (ln, li) {
         return '<tspan x="' + c[0].toFixed(1) + '" dy="' + (li === 0 ? (lines.length > 1 ? -2 : 4.5) : 15) + '">' + esc(ln) + '</tspan>';
       }).join('');
@@ -376,7 +377,11 @@
   function renderStatus() {
     var st = $('#wheel-status');
     var k = aromaShown();
-    if (!k) { st.innerHTML = ''; return; }
+    if (!k) { st.innerHTML = ''; st.removeAttribute('data-key'); return; }
+    // не перерисовываем без нужды: иначе клик по ссылке «теряется» на blur сектора
+    var key = k + '|' + aromaActive + '|' + wines.filter(function (w) { return !items[w.id].hidden; }).length;
+    if (st.getAttribute('data-key') === key) return;
+    st.setAttribute('data-key', key);
     var hits = wines.filter(function (w) { return w.aromas.indexOf(k) > -1; });
     var visibleHits = hits.filter(function (w) { return !items[w.id].hidden; }).length;
     var links = hits.map(function (w) { return '<a href="#wine-' + w.id + '" data-wine-link="' + w.id + '">' + esc(w.name) + '</a>'; }).join(', ');

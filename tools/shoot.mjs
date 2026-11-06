@@ -16,7 +16,7 @@ const problems = [];
 const log = (...a) => console.log(...a);
 
 async function newPage(browser, width, height, opts = {}) {
-  const ctx = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: opts.dpr || 1, reducedMotion: opts.reduced ? 'reduce' : 'no-preference', hasTouch: !!opts.touch, isMobile: !!opts.touch });
+  const ctx = await browser.newContext({ locale: 'ru-RU', viewport: { width, height }, deviceScaleFactor: opts.dpr || 1, reducedMotion: opts.reduced ? 'reduce' : 'no-preference', hasTouch: !!opts.touch, isMobile: !!opts.touch });
   const page = await ctx.newPage();
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') problems.push(`[${width}] console.${m.type()}: ${m.text()}`); });
   page.on('pageerror', (e) => problems.push(`[${width}] pageerror: ${e.message}`));

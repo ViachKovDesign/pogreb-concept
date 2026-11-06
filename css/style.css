@@ -294,7 +294,9 @@ input[type="range"]:focus-visible { outline-offset: 2px; }
 .wheel__sector:focus-visible path { stroke: var(--ink); stroke-width: 3; }
 .wheel__hub { fill: var(--bg); stroke: var(--line-strong); }
 .wheel__hub-text { fill: var(--ink); font: italic 500 15px/1 var(--f-accent); }
-.wheel__status { margin-top: 12px; min-height: 3.2em; font-size: .95rem; }
+.wheel__status { margin-top: 12px; font-size: .95rem; }
+.wheel__status:empty { display: none; }
+@media (max-width: 719px) { .wheel__svg { max-width: 290px; } .wheel { margin-top: 28px; } }
 .wheel__status a { white-space: nowrap; }
 .wheel__clear { min-height: 44px; }
 
@@ -321,7 +323,7 @@ input[type="range"]:focus-visible { outline-offset: 2px; }
 .card__meta { font-size: .92rem; color: var(--muted); margin-top: -6px; }
 .bars { display: grid; gap: 8px; padding-block: 4px; }
 .bar { display: grid; grid-template-columns: 6.6em 1fr; align-items: center; gap: 10px; font-size: .8rem; color: var(--muted); }
-.bar__track { position: relative; height: 6px; border-radius: 6px; background: var(--line); }
+.bar__track { display: block; position: relative; height: 6px; border-radius: 6px; background: var(--line); }
 .bar__fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 6px; background: var(--ink); }
 .bar__you { position: absolute; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; border: 2px solid var(--ink); background: var(--surface); transition: left .35s var(--ease); }
 .bars__legend { display: flex; gap: 14px; font-size: .76rem; color: var(--muted); }
@@ -350,8 +352,10 @@ input[type="range"]:focus-visible { outline-offset: 2px; }
 .empty__text { color: var(--muted); max-width: 40ch; }
 
 /* ---------- Карта вин ---------- */
-.winelist__cols { display: grid; gap: 48px clamp(32px, 5vw, 96px); }
-@media (min-width: 900px) { .winelist__cols { grid-template-columns: 1fr 1fr; } }
+.winelist__cols { column-gap: clamp(32px, 5vw, 96px); }
+.winelist__group { break-inside: avoid; margin-bottom: 48px; }
+.winelist__group:last-child { margin-bottom: 0; }
+@media (min-width: 900px) { .winelist__cols { columns: 2; } }
 .winelist__h { display: flex; align-items: center; gap: 10px; font: 400 1.9rem/1.1 var(--f-display); padding-bottom: 12px; }
 .winelist__legend { display: flex; justify-content: flex-end; gap: 0; font-size: .78rem; color: var(--muted); border-bottom: 1.5px solid var(--ink); padding-bottom: 6px; }
 .winelist__legend span { width: 6.2em; text-align: right; }
@@ -361,6 +365,10 @@ input[type="range"]:focus-visible { outline-offset: 2px; }
 .wl__price { text-align: right; align-self: center; white-space: nowrap; }
 .wl__price:nth-of-type(3) { grid-area: glass; }
 .wl__price:nth-of-type(4) { grid-area: bottle; }
+@media (max-width: 600px) {
+  .wl { grid-template-areas: "name glass bottle" "meta meta meta"; row-gap: 2px; }
+  .wl__name { align-self: center; }
+}
 @media (max-width: 420px) {
   .wl { grid-template-columns: minmax(0, 1fr) 5.4em 5.8em; }
   .winelist__legend span:first-child { width: 5.4em; }
@@ -394,8 +402,9 @@ input[type="range"]:focus-visible { outline-offset: 2px; }
 
 /* ---------- Сомелье ---------- */
 .somm__grid { display: grid; gap: 40px; }
+.somm__grid .section-head__title { font-size: clamp(2.3rem, 1.3rem + 2.8vw, 4.2rem); }
 .somm__role { font: italic 500 1.35rem/1.2 var(--f-accent); color: var(--muted); }
-.somm__portrait { max-width: 300px; }
+.somm__portrait { max-width: clamp(200px, 50vw, 300px); }
 .somm__portrait svg { width: 100%; height: auto; }
 .somm__arch { fill: var(--surface); }
 .somm__arch-line { fill: none; stroke: var(--line-strong); stroke-width: 1.5; }
@@ -438,7 +447,7 @@ input[type="range"]:focus-visible { outline-offset: 2px; }
 .candle__glow { transform-box: fill-box; transform-origin: 50% 50%; animation: glow 3.1s ease-in-out infinite; animation-delay: var(--d); }
 @keyframes flame { 0%, 100% { transform: scale(1, 1) skewX(0); } 25% { transform: scale(.92, 1.08) skewX(3deg); } 50% { transform: scale(1.05, .94) skewX(-2deg); } 75% { transform: scale(.96, 1.04) skewX(1deg); } }
 @keyframes glow { 0%, 100% { opacity: 1; transform: scale(1); } 40% { opacity: .78; transform: scale(.94); } 70% { opacity: .92; transform: scale(1.04); } }
-.hall__facts { display: grid; gap: 0 clamp(24px, 4vw, 64px); border-top: 1.5px solid var(--ink); }
+.hall__facts { display: grid; gap: 0 clamp(24px, 4vw, 64px); border-top: 1.5px solid var(--ink); margin-top: clamp(32px, 4vw, 56px); }
 .hall__facts li { display: grid; gap: 6px; padding: 22px 0; border-bottom: 1px solid var(--line-strong); }
 .hall__facts b { font: 400 1.5rem/1.15 var(--f-display); }
 .hall__facts span { color: var(--muted); }
