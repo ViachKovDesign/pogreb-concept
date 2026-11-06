@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>OG — Погреб</title>
+<link rel="stylesheet" href="../css/style.css">
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+  body { background: linear-gradient(100deg, #f1e4b3 0%, #f1e4b3 50%, #eeb7aa 59%, #8a2333 68%, #2d0d15 100%); color: #24120f; }
+  .og { position: relative; width: 1200px; height: 630px; box-sizing: border-box; padding: 64px 72px; display: grid; grid-template-columns: 1fr 300px; gap: 40px; align-items: center; }
+  .og__brand { display: flex; align-items: center; gap: 14px; font: 400 34px/1 var(--f-display); letter-spacing: .04em; }
+  .og__brand svg { width: 40px; height: 48px; }
+  .og h1 { font: 400 86px/.98 var(--f-display); letter-spacing: -.015em; margin: 36px 0 28px; }
+  .og p { font: 400 25px/1.4 var(--f-text); color: #5b4636; max-width: 30ch; margin: 0; }
+  .og__tag { position: absolute; left: 72px; bottom: 44px; font: italic 500 24px/1 var(--f-accent); color: #5b4636; }
+  .og svg.glass { width: 260px; }
+  .og .glass { --ink: #f8eedf; --surface: #611622; --wine: #c2283f; }
+</style>
+</head>
+<body>
+<div class="og">
+  <div>
+    <div class="og__brand">
+      <svg viewBox="0 0 40 48" aria-hidden="true"><path d="M3 46V20C3 10 10.5 3 20 3s17 7 17 17v26" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12.5 15h15c0 8-3 12.5-7.5 12.5S12.5 23 12.5 15Z" fill="#8a2333"/><path d="M12.5 15h15c0 8-3 12.5-7.5 12.5S12.5 23 12.5 15Z M20 27.5v8 M15.5 36h9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      Погреб
+    </div>
+    <h1>Вино под ваш вкус, а&nbsp;не под этикетку</h1>
+    <p>Винный бар в сводчатом подвале: три ползунка вместо лекций, ужины за длинным столом.</p>
+  </div>
+  <svg class="glass" viewBox="0 0 300 470" aria-hidden="true">
+    <defs><clipPath id="b"><path d="M58 28C52 120 56 198 98 246c28 32 76 32 104 0 42-48 46-126 40-218Z"/></clipPath></defs>
+    <g clip-path="url(#b)"><path d="M40 120 C 90 108, 140 134, 190 118 S 250 112, 260 120 L260 300 L40 300Z" fill="#a8172f"/></g>
+    <path d="M58 28C52 120 56 198 98 246c28 32 76 32 104 0 42-48 46-126 40-218Z" fill="none" stroke="#f8eedf" stroke-width="2.4"/>
+    <path d="M78 52c-4 60 0 118 26 160" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".5"/>
+    <path d="M146 268c2 40 2 110-4 168h16c-6-58-6-128-4-168" fill="none" stroke="#f8eedf" stroke-width="2"/>
+    <path d="M74 446c18-10 52-14 76-14s58 4 76 14c-22 6-50 8-76 8s-54-2-76-8Z" fill="none" stroke="#f8eedf" stroke-width="2"/>
+  </svg>
+  <div class="og__tag">концепт · ViachKovDesign</div>
+</div>
+</body>
+</html>
