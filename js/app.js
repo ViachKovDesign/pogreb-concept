@@ -60,7 +60,7 @@
       h1.setAttribute('tabindex', '-1');
       h1.focus({ preventScroll: true });
       h1.addEventListener('blur', function () { h1.removeAttribute('tabindex'); }, { once: true });
-      if (hasGsap) window.ScrollTrigger.refresh();
+      scheduleMotion();
     } else if (v === 'no') {
       store.set('pogreb-age', 'no:' + Date.now());
       root.classList.add('age-denied');
@@ -746,7 +746,7 @@
     requestAnimationFrame(glassLoop);
   }
   function startGlass() {
-    if (glass.running || reduced() || !glass.visible || doc.hidden) return;
+    if (!motionStarted || glass.running || reduced() || !glass.visible || doc.hidden) return;
     glass.running = true; glass.lastT = 0;
     requestAnimationFrame(glassLoop);
   }
@@ -775,9 +775,12 @@
     }
   }
 
-  function initMotion() {
+  // Движение запускаем, когда браузер свободен: первый экран рисуется без ожидания GSAP
+  var motionStarted = false;
+  function startMotion() {
+    if (motionStarted) return;
+    motionStarted = true;
     measure();
-    initGlass();
     if (hasGsap) {
       var gsap = window.gsap, ST = window.ScrollTrigger;
       gsap.registerPlugin(ST);
@@ -787,13 +790,15 @@
         onRefresh: function () { measure(); lastKey = ''; onScroll(0); }
       });
       if (!reduced()) {
-        gsap.from(glassEl, { y: 40, opacity: 0, duration: 1.3, ease: 'power3.out', delay: 0.15, clearProps: 'opacity,transform' });
-        $$('[data-reveal]').forEach(function (el) {
-          gsap.from(el, {
-            y: 34, opacity: 0, duration: 0.9, ease: 'power3.out', clearProps: 'opacity,transform',
-            scrollTrigger: { trigger: el, start: 'top 92%', once: true }
+        // прячем только то, что ниже экрана, и проявляем при подлёте — ничего не остаётся скрытым навсегда
+        var below = $$('[data-reveal]').filter(function (el) { return el.getBoundingClientRect().top > window.innerHeight; });
+        if (below.length) {
+          gsap.set(below, { opacity: 0, y: 34 });
+          ST.batch(below, {
+            start: 'top 94%', once: true,
+            onEnter: function (batch) { gsap.to(batch, { opacity: 1, y: 0, duration: 0.85, ease: 'power3.out', stagger: 0.08, clearProps: 'opacity,transform' }); }
           });
-        });
+        }
       }
       // высота страницы меняется при фильтрации — пересчитываем точки
       if ('ResizeObserver' in window) {
@@ -810,6 +815,16 @@
       window.addEventListener('resize', function () { measure(); lastKey = ''; onScroll(0); });
     }
     onScroll(0);
+    startGlass();
+  }
+  function whenIdle(fn) {
+    if ('requestIdleCallback' in window) window.requestIdleCallback(fn, { timeout: 1500 });
+    else setTimeout(fn, 200);
+  }
+  function scheduleMotion() {
+    if (root.classList.contains('age-pending')) return; // за экраном 18+ анимировать нечего
+    if (doc.readyState === 'complete') whenIdle(startMotion);
+    else window.addEventListener('load', function () { whenIdle(startMotion); }, { once: true });
   }
 
   // смена системной настройки «уменьшить движение» на лету
@@ -820,7 +835,8 @@
   if (reduceMQ.addEventListener) reduceMQ.addEventListener('change', onReduce);
 
   /* ---------- старт ---------- */
-  initMotion();
+  initGlass();
+  scheduleMotion();
   loadData().then(initPicker).catch(function (err) {
     countEl.textContent = 'Не получилось загрузить карту вин — смотрите статичный список ниже.';
     if (window.console) console.warn(err);
